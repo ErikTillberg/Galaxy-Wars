@@ -13,8 +13,19 @@ class Asteroid{
         //Set the inital x and y values for position to random values on the screen
         this.position = {};
 
+        //Set the initial position to one of
+
         this.position.x = Math.floor(Math.random()*screenWidth);
+
+        while (this.position.x > screenWidth/6 && this.position.x < screenWidth - screenWidth/6){
+          this.position.x = Math.floor(Math.random()*screenWidth);
+        }
+
         this.position.y = Math.floor(Math.random()*screenHeight);
+
+        while (this.position.y > screenHeight/6 && this.position.y < screenHeight - screenHeight/6){
+          this.position.y = Math.floor(Math.random()*screenHeight);
+        }
 
         var maxSpeed = 5;
 
@@ -24,14 +35,34 @@ class Asteroid{
         var xDir = Math.random() < 0.5? 1 : -1;
         var yDir = Math.random() < 0.5? 1: -1;
 
-        this.velocity.x = Math.ceil(Math.random()*maxSpeed)*xDir;
-        this.velocity.y = Math.ceil(Math.random()*maxSpeed)*yDir;
+        //Generate a random point inside a square of sixe mxm inside center of map:
+
+        var randomPoint = {};
+        randomPoint.x = Math.floor(Math.random()*screenWidth);
+
+        while (this.position.x < screenWidth/6 && this.position.x > screenWidth - screenWidth/6){
+          randomPoint.x = Math.floor(Math.random()*screenWidth);
+        }
+
+        randomPoint.y = Math.floor(Math.random()*screenHeight);
+
+        while (randomPoint.y < screenHeight/6 && randomPoint.y > screenHeight - screenHeight/6){
+          randomPoint.y = Math.floor(Math.random()*screenHeight);
+        }
+
+        this.velocity.x = randomPoint.x - this.position.x;
+        this.velocity.y = randomPoint.y- this.position.y;
+
+        var mag = Math.sqrt(this.velocity.x*this.velocity.x + this.velocity.y+this.velocity.y);
+
+        this.velocity.x /= mag;
+        this.velocity.y /= mag;
     }
 
     draw(context){
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
     }
-    
+
     move(){
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
